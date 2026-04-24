@@ -1,35 +1,53 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectDB from "./config/db.js";
 
-// Import routes
 import authRoutes from "./routes/authRoute.js";
 import productRoutes from "./routes/productRoute.js";
 import cartRoutes from "./routes/cartRoute.js";
 import orderRoutes from "./routes/orderRoute.js";
 import adminRoutes from "./routes/adminRoute.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+
 dotenv.config();
 connectDB();
 
 const app = express();
 
-// Middleware
+// ✅ CORS — sabse pehle
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://zenvy-frontend-zeta.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
-// 🔹 Routes
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", uploadRoutes);
-// Test Route
+
 app.get("/", (req, res) => {
   res.send("API Running...");
 });
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).json({
     success: false,
