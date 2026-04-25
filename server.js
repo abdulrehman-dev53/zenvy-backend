@@ -15,7 +15,9 @@ connectDB();
 
 const app = express();
 
-// ✅ CORS — sabse pehle
+
+// ✅ CORS — preflight + credentials sahi tarah handle hoga
+
 const allowedOrigins = [
   "http://localhost:5173",
   "https://zenvy-frontend-zeta.vercel.app",
@@ -31,8 +33,19 @@ app.use(
       }
     },
     credentials: true,
+
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+
   })
 );
+
+
+// ✅ OPTIONS preflight — ye line ZAROOR chahiye
+
+app.options("*", cors());
+
 
 app.use(express.json());
 
