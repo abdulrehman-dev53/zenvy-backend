@@ -43,8 +43,7 @@ app.use(
 
 
 // ✅ OPTIONS preflight — ye line ZAROOR chahiye
-
-app.options("*", cors());
+app.options(/(.*)/, cors());
 
 
 app.use(express.json());
