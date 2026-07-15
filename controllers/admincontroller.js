@@ -5,7 +5,7 @@ import Order from "../models/orderModel.js";
 // USERS MANAGEMENT
 // ================================
 // Get all users
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res)  => {
   try {
     const users = await User.find().select("-password");
     res.status(200).json({ success: true, data: users });
